@@ -54,7 +54,7 @@ def gadget(look_for_asm, look_in_file):
     look_for = unalignedrop.asm_compiler.find_hex(look_for_asm)
     print('Looking for: \'' + look_for_asm + '\'' + ' -> ' + str(look_for))
 
-    o = subprocess.check_output(['objdump', '-d', '-j', '.text', look_in_file])
+    o = subprocess.check_output(['objdump', '-D', '-z', '-j', '.text', look_in_file])
     look_in = unalignedrop.asm_compiler.instructions_from_objdump(o.decode('utf-8'))
     look_in = [i for l in look_in for i in l]
 
