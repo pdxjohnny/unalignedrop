@@ -1,0 +1,12 @@
+*.o
+*.pyc
+__pycache__
+*~
+*.swp
+*.pdf
+*build
+MANIFEST
+*dist
+*.egg-info
+*.core
+*.venv/
