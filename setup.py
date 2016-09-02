@@ -23,7 +23,6 @@ setup(
     version=VERSION,
     data_files=[('', ['LICENSE.md']), ],
     entry_points={'console_scripts': CONSOLE_SCRIPTS},
-    scripts=[os.path.join('bin', s) for s in os.listdir('bin')],
     description='Find unaligned rop gadgets in x86 x64 x86_64',
     author='John Andersen',
     author_email='johnandersenpdx@gmail.com',

@@ -1,8 +1,0 @@
-#!/usr/bin/env python3.5
-import unalignedrop.cli.unalignedrop
-
-def main():
-    unalignedrop.cli.unalignedrop.main()
-
-if __name__ == '__main__':
-    main()
