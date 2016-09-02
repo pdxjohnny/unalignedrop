@@ -17,7 +17,7 @@ def gadget(look_for_asm, look_in_file):
 
     i = look_in.find(look_for)
     if i > 0:
-        return i
+        return int(i / 2)
     raise Exception('Could not find \'' + look_for_asm + '\' in ' + look_in_file)
 
 def main():
