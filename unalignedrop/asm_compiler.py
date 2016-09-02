@@ -16,7 +16,7 @@ def instructions_from_objdump(o):
     instructions = []
     for l in o.split('\n'):
         l = l.split()
-        if len(l) < 1 or l[0][-1] != ':':
+        if len(l) < 1:
             continue
         try:
             int(l[0][:-1], 16)
