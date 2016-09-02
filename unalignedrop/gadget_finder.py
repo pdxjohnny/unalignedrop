@@ -1,7 +1,8 @@
 #!/usr/bin/env python3.5
 import os
 import sys
-from pwn import *
+import tempfile
+import subprocess
 
 basic_start = '''
 int main() {
@@ -50,21 +51,24 @@ def find_instructions(base, compare_too):
 
 def to_hex(instruction=""):
     c = basic_start + instruction + basic_end
-    print(c)
+    # print(c)
     with tempfile.TemporaryDirectory() as d:
         os.chdir(d)
         with open('main.c', 'wb') as f:
             f.write(c.encode('ascii'))
 
-        p = process(['gcc', 'main.c', '-c'])
-        o = p.recvall().decode('utf-8')
-        if len(o) > 0:
-            raise Exception('ERROR compiling \'' + instruction + '\'\n' + o)
+        o = ''
+        try:
+            o = subprocess.check_output(['gcc', 'main.c', '-c'])
+            o = o.decode('utf-8')
+        except Exception as e:
+            if len(o) > 0:
+                raise Exception('ERROR compiling \'' + instruction + '\'\n' + o)
+            else:
+                raise e
 
-        p = process(['objdump', '-d', '-j', '.text', 'main.o'])
-        o = p.recvall().decode('utf-8')
-        p.wait()
-        p.shutdown()
+        o = subprocess.check_output(['objdump', '-d', '-j', '.text', 'main.o'])
+        o = o.decode('utf-8')
     # print(o)
     return o
 

@@ -7,23 +7,23 @@ from setuptools import setup, find_packages
 
 # Get the version
 with open(os.path.join('unalignedrop', 'version.py'), 'rb') as fd:
-    VERSION = fd.read().decode('urtf-8').split()[-1].replace('\'', '')
+    VERSION = fd.read().decode('utf-8').split()[-1].replace('\'', '')
 
 # Find all of the console scripts
 CONSOLE_SCRIPTS = []
 for filename in os.listdir(os.path.join('unalignedrop', 'cli')):
     if not '__init__' in filename and '.py' in filename:
+        filename = filename.replace('.py', '')
         CONSOLE_SCRIPTS.append('%s=%s:main' %
-                               (filename.replace('.py', ''),
-                                filename.replace('/', '.')))
+                               (filename, 'unalignedrop.cli.' + filename))
 
 setup(
     name='unalignedrop',
     packages=find_packages(),
-    VERSION=VERSION,
+    version=VERSION,
     data_files=[('', ['LICENSE.md']), ],
     entry_points={'console_scripts': CONSOLE_SCRIPTS},
-    scripts=os.listdir('bin'),
+    scripts=[os.path.join('bin', s) for s in os.listdir('bin')],
     description='Find unaligned rop gadgets in x86 x64 x86_64',
     author='John Andersen',
     author_email='johnandersenpdx@gmail.com',
