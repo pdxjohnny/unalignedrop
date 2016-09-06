@@ -3,7 +3,9 @@ import sys
 import subprocess
 
 import unalignedrop.asm_compiler
+import unalignedrop.cache
 
+@unalignedrop.cache.Cache
 def section(section, look_in_file):
     o = subprocess.check_output(['objdump', '-D', '-z', look_in_file])
     look_in = unalignedrop.asm_compiler.sections_from_objdump(o.decode('utf-8'))
