@@ -12,6 +12,37 @@ basic_end = '''");
 }
 '''
 
+def sections_from_objdump(o):
+    last_section = ''
+    sections = []
+    instructions = []
+    for l in o.split('\n'):
+        if len(l) > 0 and l.startswith('Disassembly of section'):
+            if last_section != '':
+                sections.append([last_section, instructions])
+                instructions = []
+            last_section = l.split()[-1][:-1]
+        l = l.split()
+        if len(l) < 1:
+            continue
+        try:
+            int(l[0][:-1], 16)
+        except:
+            continue
+        addr = l[0]
+        i = 0
+        l = l[1:]
+        for w in l:
+            try:
+                w = bytes.fromhex(w)
+            except:
+                break
+            i += 1
+        instructions.append(l[:i])
+    if last_section != '':
+        sections.append([last_section, instructions])
+    return sections
+
 def instructions_from_objdump(o):
     instructions = []
     for l in o.split('\n'):
