@@ -22,23 +22,7 @@ def sections_from_objdump(o):
                 sections.append([last_section, instructions])
                 instructions = []
             last_section = l.split()[-1][:-1]
-        l = l.split()
-        if len(l) < 1:
-            continue
-        try:
-            int(l[0][:-1], 16)
-        except:
-            continue
-        addr = l[0]
-        i = 0
-        l = l[1:]
-        for w in l:
-            try:
-                w = bytes.fromhex(w)
-            except:
-                break
-            i += 1
-        instructions.append(l[:i])
+        objdump_line_to_array(l, instructions)
     if last_section != '':
         sections.append([last_section, instructions])
     return sections
@@ -46,39 +30,43 @@ def sections_from_objdump(o):
 def instructions_from_objdump(o):
     instructions = []
     for l in o.split('\n'):
-        l = l.split()
-        if len(l) < 1:
-            continue
-        try:
-            int(l[0][:-1], 16)
-        except:
-            continue
-        addr = l[0]
-        i = 0
-        l = l[1:]
-        for w in l:
-            try:
-                w = bytes.fromhex(w)
-            except:
-                break
-            i += 1
-        instructions.append(l[:i])
+        objdump_line_to_array(l, instructions)
     return instructions
+
+def objdump_line_to_array(l, instructions):
+    l = l.split()
+    if len(l) < 1:
+        return
+    try:
+        addr = int(l[0][:-1], 16)
+    except:
+        return
+    l = l[1:]
+    for w in l:
+        try:
+            bytes.fromhex(w)
+            if addr < len(instructions):
+                instructions[addr] = w
+            else:
+                instructions.append(w)
+            addr += 1
+        except:
+            break
 
 def find_instructions(base, compare_too):
     j = 0
     k = 0
     for i in range(0, len(base)):
-        # print(str(base[i]), str(compare_too[i]))
-        if str(base[i]) != str(compare_too[i]):
+        # print(base[i], compare_too[i])
+        if base[i] != compare_too[i]:
             break
         j += 1
     for i in range(1, len(compare_too) + 1):
-        # print(str(base[-i]), str(compare_too[-i]))
-        if str(base[-i]) != str(compare_too[-i]):
+        # print(base[-i], compare_too[-i])
+        if base[-i] != compare_too[-i]:
             break
         k += 1
-    return [i for l in compare_too[j:-k] for i in l]
+    return [i for i in compare_too[j:-k]]
 
 def to_hex(instruction=""):
     c = basic_start + instruction + basic_end

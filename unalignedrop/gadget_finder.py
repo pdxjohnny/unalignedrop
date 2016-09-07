@@ -15,7 +15,7 @@ def gadget(look_for_asm, look_in_file):
 
     o = subprocess.check_output(['objdump', '-D', '-z', '-j', '.text', look_in_file])
     look_in = unalignedrop.asm_compiler.instructions_from_objdump(o.decode('utf-8'))
-    look_in = [i for l in look_in for i in l]
+    look_in = [i for i in look_in]
 
     look_for = ''.join(look_for)
     look_in = ''.join(look_in)

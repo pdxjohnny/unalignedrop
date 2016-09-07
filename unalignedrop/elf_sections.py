@@ -13,6 +13,7 @@ def section(section, look_in_file):
     found = False
     offset = 0
     for i in range(0, len(look_in)):
+        print(look_in[i][0], hex(len(look_in[i][1])))
         if look_in[i][0] == section:
             found = True
             break
