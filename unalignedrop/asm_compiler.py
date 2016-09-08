@@ -71,23 +71,27 @@ def find_instructions(base, compare_too):
 def to_hex(instruction=""):
     c = basic_start + instruction + basic_end
     # print(c)
+    pwd = os.getcwd()
     with tempfile.TemporaryDirectory() as d:
-        os.chdir(d)
-        with open('main.c', 'wb') as f:
-            f.write(c.encode('ascii'))
-
-        o = ''
         try:
-            o = subprocess.check_output(['gcc', 'main.c', '-c'])
-            o = o.decode('utf-8')
-        except Exception as e:
-            if len(o) > 0:
-                raise Exception('ERROR compiling \'' + instruction + '\'\n' + o)
-            else:
-                raise e
+            os.chdir(d)
+            with open('main.c', 'wb') as f:
+                f.write(c.encode('ascii'))
 
-        o = subprocess.check_output(['objdump', '-d', '-j', '.text', 'main.o'])
-        o = o.decode('utf-8')
+            o = ''
+            try:
+                o = subprocess.check_output(['gcc', 'main.c', '-c'])
+                o = o.decode('utf-8')
+            except Exception as e:
+                if len(o) > 0:
+                    raise Exception('ERROR compiling \'' + instruction + '\'\n' + o)
+                else:
+                    raise e
+
+            o = subprocess.check_output(['objdump', '-d', '-j', '.text', 'main.o'])
+            o = o.decode('utf-8')
+        finally:
+            os.chdir(pwd)
     # print(o)
     return o
 
