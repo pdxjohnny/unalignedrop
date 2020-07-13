@@ -3,16 +3,16 @@ import os
 import json
 import hashlib
 
-class Cache(object):
 
+class Cache(object):
     def __init__(self, func):
-        cache_name = '.unalignedrop-cache-{0}'.format(func.__name__)
-        self.cache_file = os.path.join(os.path.expanduser('~'), cache_name)
+        cache_name = ".unalignedrop-cache-{0}".format(func.__name__)
+        self.cache_file = os.path.join(os.path.expanduser("~"), cache_name)
         self.cache = {}
         self.func = func
         if os.path.exists(self.cache_file):
             try:
-                with open(self.cache_file, 'r') as f:
+                with open(self.cache_file, "r") as f:
                     self.cache = json.load(f)
             except:
                 pass
@@ -21,7 +21,7 @@ class Cache(object):
         h = look_in_file
         try:
             h = hashlib.md5()
-            with open(look_in_file, 'rb') as f:
+            with open(look_in_file, "rb") as f:
                 for l in f:
                     h.update(l)
             h = h.digest().hex()
@@ -40,7 +40,7 @@ class Cache(object):
             if not h in self.cache:
                 self.cache[h] = {}
             self.cache[h][file_search] = res
-            with open(self.cache_file, 'w') as f:
+            with open(self.cache_file, "w") as f:
                 json.dump(self.cache, f)
             if not isinstance(res, int):
                 raise Exception(res)

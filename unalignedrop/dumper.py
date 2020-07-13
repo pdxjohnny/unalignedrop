@@ -3,7 +3,7 @@ import sys
 
 for l in sys.stdin:
     l = l.split()
-    if len(l) < 1 or l[0][-1] != ':' or not l[0][:-1].isdigit():
+    if len(l) < 1 or l[0][-1] != ":" or not l[0][:-1].isdigit():
         continue
     i = 0
     l = l[1:]
@@ -14,5 +14,5 @@ for l in sys.stdin:
             break
         i += 1
     l = l[:i]
-    l = ' '.join(l) + ' '
+    l = " ".join(l) + " "
     sys.stdout.write(l)

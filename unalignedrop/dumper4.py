@@ -2,7 +2,7 @@
 import sys
 
 start = sys.argv[1]
-end   = sys.argv[2]
+end = sys.argv[2]
 
 r = []
 appending = False
@@ -10,7 +10,7 @@ appending = False
 for l in sys.stdin:
     if len(l) < 1:
         continue
-    s = l.split(':')[-1]
+    s = l.split(":")[-1]
     if start in s:
         appending = []
     if appending != False:
@@ -26,4 +26,4 @@ if appending != False:
 for l in r:
     if len(l) > 2:
         continue
-    print(''.join(l))
+    print("".join(l))
